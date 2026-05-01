@@ -1,9 +1,9 @@
-const Admin = require('../models/Admin');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
+const Admin = require("../models/Admin");
+const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // Admin login
@@ -13,19 +13,19 @@ exports.loginAdmin = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        errors: errors.array()
+        errors: errors.array(),
       });
     }
 
     const { email, password } = req.body;
 
     // Check if admin exists with password
-    const admin = await Admin.findOne({ email }).select('+password');
+    const admin = await Admin.findOne({ email }).select("+password");
 
     if (!admin) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password'
+        message: "Invalid email or password",
       });
     }
 
@@ -35,7 +35,7 @@ exports.loginAdmin = async (req, res, next) => {
     if (!isPasswordMatched) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password'
+        message: "Invalid email or password",
       });
     }
 
@@ -43,12 +43,12 @@ exports.loginAdmin = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: 'Login successful',
+      message: "Login successful",
       token,
       admin: {
         id: admin._id,
-        email: admin.email
-      }
+        email: admin.email,
+      },
     });
   } catch (error) {
     next(error);
@@ -65,7 +65,7 @@ exports.registerAdmin = async (req, res, next) => {
     if (existingAdmin) {
       return res.status(400).json({
         success: false,
-        message: 'Admin already exists'
+        message: "Admin already exists",
       });
     }
 
@@ -74,21 +74,22 @@ exports.registerAdmin = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: 'Admin registered successfully',
+      message: "Admin registered successfully",
       data: {
         id: admin._id,
-        email: admin.email
-      }
+        email: admin.email,
+      },
     });
   } catch (error) {
     next(error);
   }
+  f;
 };
 
 // Verify token
 exports.verifyToken = (req, res) => {
   res.status(200).json({
     success: true,
-    admin: req.admin
+    admin: req.admin,
   });
 };
